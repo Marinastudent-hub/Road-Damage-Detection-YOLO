@@ -102,12 +102,12 @@ The application displays detected road damage and prediction confidence scores.
 
 ## Repository Contents
 
-- `road-damage-detection.ipynb` — Notebook containing dataset preparation, model training, evaluation, tuning, and visualizations.
+- `road-damage-detection.ipynb` — Notebook for dataset preparation, model training, evaluation, hyperparameter tuning, and visualizations.
 - `README.md` — Project documentation.
 - `LICENSE` — MIT License.
+- `flask_app.png` — Screenshot of the Flask web application.
 
-The Flask application files and model weights should also be included in the repository if they are intended to be distributed with the project.
-
+The Flask source files (`app.py`, `templates/index.html`, and `requirements.txt`) and trained model weights are not listed above because their presence in the repository has not yet been confirmed.
 ## How to Run
 
 1. Open the notebook in Kaggle.
