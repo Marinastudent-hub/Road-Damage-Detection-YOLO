@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Road Damage Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 16px;
+            background: #f4f7f6;
+            color: #20332d;
+        }
+        h1 { color: #176b52; }
+        .panel {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin: 18px 0;
+        }
+        label {
+            display: block;
+            margin: 14px 0 6px;
+            font-weight: bold;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 18px;
+            background: #176b52;
+            color: white;
+            border: 0;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+        .error { color: #b00020; }
+        .hint { color: #586861; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h1>Road Damage Detection</h1>
+    <p>Detect potholes, cracks, and manholes using the trained YOLO model.</p>
+
+    <div class="panel">
+        <form method="POST" enctype="multipart/form-data">
+            <label for="sample_image">Choose an image from the dataset</label>
+            <select name="sample_image" id="sample_image">
+                <option value="">-- Or upload your own image below --</option>
+                {% for image in sample_images %}
+                <option value="{{ image }}" {% if selected_image == image %}selected{% endif %}>
+                    {{ image }}
+                </option>
+                {% endfor %}
+            </select>
+            <p class="hint">{{ sample_images|length }} dataset images available.</p>
+
+            <label for="image">Or upload an image from your device</label>
+            <input type="file" name="image" id="image" accept="image/*">
+
+            <label for="confidence">Confidence threshold (0.1–0.9)</label>
+            <input type="number" id="confidence" name="confidence"
+                   min="0.1" max="0.9" step="0.05" value="0.25">
+
+            <button type="submit">Detect Road Damage</button>
+        </form>
+    </div>
+
+    {% if error %}
+    <div class="panel error">{{ error }}</div>
+    {% endif %}
+
+    {% if result_image %}
+    <div class="panel">
+        <h2>Detection Result</h2>
+        <img src="{{ url_for('static', filename=result_image) }}"
+             alt="Predicted road damage">
+        <h3>Detected Objects: {{ detections|length }}</h3>
+
+        {% if detections %}
+        <ul>
+            {% for item in detections %}
+            <li>{{ item.name }} — {{ item.confidence }}% confidence</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No objects detected at this confidence threshold.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</body>
+</html>
